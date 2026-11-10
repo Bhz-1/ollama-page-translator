@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Translation Test Page</title>
+<style>
+  body { font-family: Georgia, serif; max-width: 860px; margin: 0 auto; padding: 24px; line-height: 1.6; color: #222; }
+  h1 { font-size: 30px; }
+  .cards { display: flex; gap: 14px; margin: 24px 0; }
+  .card { flex: 1 1 0; border: 1px solid #ddd; border-radius: 8px; padding: 12px; }
+  .clipper { height: 60px; overflow: hidden; border: 1px dashed #bbb; padding: 8px; }
+  table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+  td, th { border: 1px solid #ccc; padding: 6px 10px; text-align: left; }
+  nav { background: #f3f3f3; padding: 8px 12px; border-radius: 6px; }
+  nav a { margin-right: 14px; }
+  .fixedbox { position: fixed; right: 80px; bottom: 10px; background: #ffe; padding: 6px; border: 1px solid #cc0; }
+  .menu-wrap { position: relative; display: inline-block; margin: 18px 0; }
+  .menu-btn { padding: 6px 14px; cursor: pointer; }
+  .menu { position: absolute; top: 110%; left: 0; width: 230px; background: #fff; border: 1px solid #d0d7de; border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,.15); padding: 6px 0; z-index: 100; }
+  .menu a { display: block; padding: 8px 14px; color: #1f2328; text-decoration: none; font-size: 14px; }
+</style>
+</head>
+<body>
+<h1>How Local Language Models Change Everyday Computing</h1>
+<nav><a href="#">Home</a><a href="#">Docs</a><a href="#">Pricing</a><a href="#">About</a></nav>
+
+<div class="menu-wrap">
+  <button class="menu-btn" id="menuBtn">+</button>
+  <div class="menu" id="menu" style="display:none">
+    <a href="#">New issue</a>
+    <a href="#">New repository</a>
+    <a href="#">Import repository</a>
+    <a href="#">New codespace</a>
+    <a href="#">New gist</a>
+    <a href="#">New organization</a>
+    <a href="#">New project</a>
+  </div>
+</div>
+
+<p>Running a large language model on your own laptop used to require a data center. Today, a quantized seven-billion-parameter model fits comfortably in eight gigabytes of video memory.</p>
+
+<p>The main advantage is privacy. Your documents never leave the machine, and there is no monthly bill. The trade-off is speed: local inference is slower than a hosted API.</p>
+
+<h2>What you can do with it</h2>
+<ul>
+  <li>Summarize long reports without uploading them to a cloud service.</li>
+  <li>Translate web pages while you read them, offline.</li>
+</ul>
+
+<div class="cards">
+  <div class="card"><strong>Privacy first</strong><br>Nothing leaves your computer.</div>
+  <div class="card"><strong>Zero cost</strong><br>No tokens, no subscription.</div>
+</div>
+
+<div class="clipper">This sentence sits inside a fixed-height clipping container, so the translation must be placed after the container instead.</div>
+
+<div class="fixedbox">This is a fixed overlay box, which should NOT be translated in place.</div>
+
+<script>
+  document.getElementById('menuBtn').addEventListener('click', function (e) {
+    e.stopPropagation();
+    var m = document.getElementById('menu');
+    m.style.display = m.style.display === 'none' ? 'block' : 'none';
+  });
+  document.addEventListener('click', function () {
+    document.getElementById('menu').style.display = 'none';
+  });
+</script>
+</body>
+</html>

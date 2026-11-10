@@ -1,0 +1,12 @@
+# 模型文件与临时产物
+*.gguf
+*.partial
+*.log
+
+# 系统
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 依赖
+node_modules/

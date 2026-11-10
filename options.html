@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>本地网页翻译 · 设置</title>
+<style>
+  :root {
+    --bg: #f6f8fa;
+    --card: #ffffff;
+    --line: #e3e8ee;
+    --txt: #1f2937;
+    --sub: #6b7280;
+    --accent: #1f8a4c;
+    --accent-weak: #e7f6ec;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0f1419;
+      --card: #171d24;
+      --line: #2a333d;
+      --txt: #e5e9ef;
+      --sub: #93a1b0;
+      --accent: #3ddc84;
+      --accent-weak: #122b1c;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 28px 20px 60px;
+    background: var(--bg);
+    color: var(--txt);
+    font: 14px/1.6 system-ui, -apple-system, "Segoe UI", "Microsoft YaHei", "PingFang SC", sans-serif;
+  }
+  .wrap { max-width: 680px; margin: 0 auto; }
+  h1 { font-size: 20px; margin: 0 0 4px; letter-spacing: .2px; }
+  .sub { margin: 0 0 22px; color: var(--sub); font-size: 13px; }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 18px 20px;
+    margin-bottom: 16px;
+  }
+  .card h2 { font-size: 14px; margin: 0 0 14px; font-weight: 600; color: var(--sub); letter-spacing: .4px; }
+  .row { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+  .row:last-child { margin-bottom: 0; }
+  .row label.k { width: 132px; flex: 0 0 132px; color: var(--txt); font-size: 13px; }
+  .row .val { flex: 1 1 auto; min-width: 0; }
+  input[type=text], input[type=number], select {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--bg);
+    color: var(--txt);
+    font: inherit;
+    outline: none;
+  }
+  input[type=text]:focus, input[type=number]:focus, select:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-weak);
+  }
+  input[type=range] { width: 100%; accent-color: var(--accent); }
+  .switch { display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 13px; }
+  .switch input { width: 16px; height: 16px; accent-color: var(--accent); cursor: pointer; }
+  .hint { color: var(--sub); font-size: 12px; margin-top: 6px; min-height: 16px; }
+  .hint.ok { color: var(--accent); }
+  .hint.bad { color: #dc2626; }
+  .btns { display: flex; gap: 10px; align-items: center; margin-top: 6px; }
+  button {
+    padding: 9px 18px;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+    background: var(--card);
+    color: var(--txt);
+    font: inherit;
+    cursor: pointer;
+    transition: background .15s, border-color .15s;
+  }
+  button:hover { border-color: var(--accent); }
+  button.primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+    font-weight: 600;
+  }
+  button.primary:hover { filter: brightness(1.06); }
+  button:disabled { opacity: .55; cursor: default; }
+  .save-state { font-size: 13px; color: var(--accent); opacity: 0; transition: opacity .2s; }
+  .save-state.show { opacity: 1; }
+  .note {
+    background: var(--accent-weak);
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 12.5px;
+    color: var(--sub);
+    line-height: 1.7;
+  }
+  .note b { color: var(--txt); }
+  code {
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 1px 5px;
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 12px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>本地网页翻译 · 设置</h1>
+  <p class="sub">翻译全部由本机 Ollama 完成，不出网、不花钱。改完点保存，之后刷新要翻译的页面即可生效。</p>
+
+  <div class="card">
+    <h2>模型连接</h2>
+    <div class="row">
+      <label class="k" for="baseURL">服务地址</label>
+      <div class="val"><input type="text" id="baseURL" spellcheck="false" placeholder="http://127.0.0.1:11434"></div>
+    </div>
+    <div class="row">
+      <label class="k" for="model">模型</label>
+      <div class="val">
+        <input type="text" id="model" spellcheck="false" list="modelList" placeholder="dsh-qwen25:7b">
+        <datalist id="modelList"></datalist>
+      </div>
+    </div>
+    <div class="row">
+      <label class="k">连通性</label>
+      <div class="val">
+        <div class="btns"><button id="pingBtn" type="button">测试连接</button></div>
+        <div class="hint" id="pingHint"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>翻译</h2>
+    <div class="row">
+      <label class="k" for="targetLang">目标语言</label>
+      <div class="val">
+        <select id="targetLang">
+          <option value="简体中文">简体中文</option>
+          <option value="繁体中文">繁体中文</option>
+          <option value="English">English</option>
+          <option value="日本語">日本語</option>
+          <option value="한국어">한국어</option>
+        </select>
+      </div>
+    </div>
+    <div class="row">
+      <label class="k" for="translateChinese">翻译中文页面</label>
+      <div class="val">
+        <label class="switch"><input type="checkbox" id="translateChinese"> 页面已经是中文也照翻（默认跳过，避免白跑）</label>
+      </div>
+    </div>
+    <div class="row">
+      <label class="k" for="skipNavFooter">跳过导航</label>
+      <div class="val">
+        <label class="switch"><input type="checkbox" id="skipNavFooter"> 不翻译 header / nav / footer 里的导航文字</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>显示</h2>
+    <div class="row">
+      <label class="k" for="fontScale">译文字号</label>
+      <div class="val">
+        <input type="range" id="fontScale" min="0.8" max="1.2" step="0.05" value="0.95">
+        <div class="hint" id="fontScaleHint">相对原文 95%</div>
+      </div>
+    </div>
+    <div class="row">
+      <label class="k" for="minFontSize">最小号</label>
+      <div class="val">
+        <input type="number" id="minFontSize" min="10" max="24" step="1" value="13">
+        <div class="hint">原文特别小的时候，译文不低于这个像素值</div>
+      </div>
+    </div>
+    <div class="row">
+      <label class="k" for="maxFontSize">最大号</label>
+      <div class="val">
+        <input type="number" id="maxFontSize" min="12" max="32" step="1" value="18">
+        <div class="hint">原文特别大的时候，译文不超过这个像素值，避免喧宾夺主</div>
+      </div>
+    </div>
+    <div class="row">
+      <label class="k" for="showFab">悬浮按钮</label>
+      <div class="val">
+        <label class="switch"><input type="checkbox" id="showFab"> 在页面右侧显示「译」按钮</label>
+      </div>
+    </div>
+    <div class="row">
+      <label class="k" for="shortcut">快捷键</label>
+      <div class="val">
+        <label class="switch"><input type="checkbox" id="shortcut"> Ctrl + Alt + T 触发翻译 / 停止 / 还原</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>模型 / 显存</h2>
+    <div class="row">
+      <label class="k" for="autoUnload">翻译完卸载</label>
+      <div class="val">
+        <label class="switch"><input type="checkbox" id="autoUnload"> 翻完立刻卸载模型，把显存还回去（下次翻译要重新加载，约 4–10 秒）</label>
+      </div>
+    </div>
+    <div class="row">
+      <label class="k">立即停止</label>
+      <div class="val">
+        <div class="btns"><button id="unloadBtn" type="button">停止本地模型</button></div>
+        <div class="hint" id="unloadHint">点一下让 Ollama 立刻卸载模型、释放显存</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="btns">
+    <button id="saveBtn" class="primary" type="button">保存设置</button>
+    <button id="resetBtn" type="button">恢复默认</button>
+    <span class="save-state" id="saveState">已保存</span>
+  </div>
+
+  <div class="note" style="margin-top:22px">
+    <b>怎么用：</b>打开任意网页 → 点右侧的「译」按钮 → 译文会以绿色小段落出现在每段原文的下方，点击「还原」清除。<br>
+    <b>不遮挡：</b>译文是页面正常排版的一部分（普通块元素，不用浮层、不绝对定位），所以只会把下面的内容顶下去，永远不会盖住原文或别的译文。<br>
+    <b>模型没起？</b>命令行运行 <code>E:\Ollama\serve.cmd</code>，或启动计划任务 <code>OllamaServer</code>。首次翻译要加载模型，会慢一点。
+  </div>
+</div>
+<script src="options.js"></script>
+</body>
+</html>
