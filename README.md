@@ -199,3 +199,13 @@ node test/cdp-translate.mjs
 ### 模型准备
 
 怎么把 Qwen2.5-7B 弄进 Ollama、split GGUF 为什么不能自己合并，见 [docs/model-setup.md](docs/model-setup.md)。
+
+### 推送更新
+
+github.com 直连经常被掐，`git push` 会一直卡着。用 API 推：
+
+```bash
+node scripts/push-api.mjs
+```
+
+它会从 `origin` 读仓库名、从 `gh auth token` 取凭据（或直接用 `GH_TOKEN` 环境变量），把当前目录推上去。第一次推空仓库会先落 README 生成首个 commit。
